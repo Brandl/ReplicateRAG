@@ -1,6 +1,8 @@
 # RAG-DLNP
 
 Code for a university group project.
+192.039 Deep Learning for Natural Language Processing
+2025S
 
 ### Group
 
