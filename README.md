@@ -58,30 +58,31 @@ This will read in questions and write the answers down in the specified file.
 
 ## Sources
 Original Paper:
-@article{DBLP:journals/corr/abs-2005-11401,
-  author       = {Patrick Lewis and
-                  Ethan Perez and
-                  Aleksandra Piktus and
-                  Fabio Petroni and
-                  Vladimir Karpukhin and
-                  Naman Goyal and
-                  Heinrich K{\"{u}}ttler and
-                  Mike Lewis and
-                  Wen{-}tau Yih and
-                  Tim Rockt{\"{a}}schel and
-                  Sebastian Riedel and
-                  Douwe Kiela},
-  title        = {Retrieval-Augmented Generation for Knowledge-Intensive {NLP} Tasks},
-  journal      = {CoRR},
-  volume       = {abs/2005.11401},
-  year         = {2020},
-  url          = {https://arxiv.org/abs/2005.11401},
-  eprinttype    = {arXiv},
-  eprint       = {2005.11401},
-  timestamp    = {Mon, 14 Apr 2025 22:19:01 +0200},
-  biburl       = {https://dblp.org/rec/journals/corr/abs-2005-11401.bib},
-  bibsource    = {dblp computer science bibliography, https://dblp.org}
-}
+
+    @article{DBLP:journals/corr/abs-2005-11401,
+      author       = {Patrick Lewis and
+                      Ethan Perez and
+                      Aleksandra Piktus and
+                      Fabio Petroni and
+                      Vladimir Karpukhin and
+                      Naman Goyal and
+                      Heinrich K{\"{u}}ttler and
+                      Mike Lewis and
+                      Wen{-}tau Yih and
+                      Tim Rockt{\"{a}}schel and
+                      Sebastian Riedel and
+                      Douwe Kiela},
+      title        = {Retrieval-Augmented Generation for Knowledge-Intensive {NLP} Tasks},
+      journal      = {CoRR},
+      volume       = {abs/2005.11401},
+      year         = {2020},
+      url          = {https://arxiv.org/abs/2005.11401},
+      eprinttype    = {arXiv},
+      eprint       = {2005.11401},
+      timestamp    = {Mon, 14 Apr 2025 22:19:01 +0200},
+      biburl       = {https://dblp.org/rec/journals/corr/abs-2005-11401.bib},
+      bibsource    = {dblp computer science bibliography, https://dblp.org}
+    }
 
 Datasets:
 https://dl.fbaipublicfiles.com/dpr/wikipedia_split/psgs_w100.tsv.gz
