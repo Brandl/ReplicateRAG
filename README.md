@@ -116,6 +116,7 @@ This will read in questions and write the answers down in the specified file.
 
 You can evaluate the generated answer with "golden" true answers by running the following script or equivalent files: first argument is for file which stores prediction, second one for gold answers as downloaded in earlier steps. Both files should be .json format following this structure:  `{int(d["id"]): (d["question"], d["answer"])}`
 
+    python eval_rag_.py <prediction_file> <reference_file>
     python eval_rag_.py --preds_ref answers/nq_350_answers_jn.json qa_datasets_all_slices/naturalqa_slice_350_qa.json
 
 
