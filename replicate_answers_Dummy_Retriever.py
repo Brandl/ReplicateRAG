@@ -262,7 +262,7 @@ def test_first_batch(dataloader, model, tokenizer, device, output_path):
     ids, questions, _ = next(iter(dataloader))
 
     # Generate predictions
-    predictions = generate_answer(questions, device, model, tokenizer)
+    predictions = model.generate_answer(questions, device, model, tokenizer)
 
     # Fallback to --NOT FOUND--\n
     for id_, q, pred in zip(ids, questions, predictions):

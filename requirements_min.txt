@@ -15,9 +15,3 @@ torch==2.6.0 # load the CUDA version if using GPU
 torchvision
 transformers
 tqdm
-
-
-
-
-
- 

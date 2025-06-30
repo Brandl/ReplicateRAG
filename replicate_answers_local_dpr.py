@@ -85,9 +85,8 @@ class QADataset(Dataset):
         return item["id"], item["question"], item["answer"]
 
 class RAGModelManagerLocalDprWiki:
-    """Class to manage RAG model components and inference using local Wiki Dpr dataset
-        define if for testing purpose = "sample" or "full" dataset 
-        """
+    """ Class to manage RAG model components and inference using local Wiki Dpr dataset
+        define if for testing purpose = "sample" or "full" dataset """
     
     def __init__(self, purpose = "sample"):
         self.purpose = purpose  # Change to "sample" for the sample dataset, change to "full" for the full dataset
