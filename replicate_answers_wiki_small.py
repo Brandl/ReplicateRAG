@@ -1,18 +1,11 @@
 from datasets import load_dataset
-import itertools
-import random
 from pathlib import Path
 import json
-import os
 from tqdm import tqdm
-
-import re
-import string
 
 from datasets import load_dataset, load_from_disk, Dataset
 from transformers import DPRContextEncoder, DPRContextEncoderTokenizer
 from transformers import RagTokenizer, RagRetriever, RagTokenForGeneration
-from transformers import AutoTokenizer
 import torch
 from torch.utils.data import DataLoader
 
@@ -165,7 +158,6 @@ class RAGModelManagerOwnDataset:
         self.tokenizer = RagTokenizer.from_pretrained("facebook/rag-token-nq")
 
         # Use RAG retriever with wikipedia snippets
-
         retriever_manager = WikiSMallRetrieverDataset(purpose = self.purpose)
 
         retriever_manager.load_and_store()
@@ -191,13 +183,6 @@ class RAGModelManagerOwnDataset:
         """Generate answers for a batch of questions"""
         if not self.is_initialized:
             raise RuntimeError("Model not initialized. Call initialize_model() first.")
-            
-        # # Determine device
-        # if device is None:
-        #     self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        # else:
-        #     self.device = device
-        # print(f"Using device: {self.device}")
 
         # Ensure model is on correct device (in case it was moved)
         self.model.to(self.device)
@@ -385,7 +370,7 @@ def test_first_batch(dataloader, model, tokenizer, device, output_path):
     ids, questions, _ = next(iter(dataloader))
 
     # Generate predictions
-    predictions = generate_answer(questions, device, model, tokenizer)
+    predictions = model.generate_answer(questions, device, model, tokenizer)
 
     # Fallback to --NOT FOUND--\n
     for id_, q, pred in zip(ids, questions, predictions):
@@ -431,14 +416,6 @@ def main():
     ]
 
     infer_multiple_datasets(rag_manager, configs)
-
-    # Optional: Run generation and save results
-    # Uncomment the following lines to generate answers for the entire dataset
-    # output_dir = "answers_replicate"
-    # output_path = Path(output_dir, "generated_answers_nq350.json")
- 
-    # run_generation_and_save(dataloader, model, tokenizer, device, str(output_path))
-    # test_first_batch(dataloader, model, tokenizer, device, str(output_path))    
 
 if __name__ == "__main__":
     main()

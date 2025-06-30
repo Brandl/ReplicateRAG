@@ -1,0 +1,23 @@
+python_version >= 3.9, <3.13
+
+datasets 
+faiss-cpu
+fsspec
+huggingface-hub
+langchain 
+langchain-community 
+langchain-openai 
+numpy
+pandas
+qdrant-client 
+sentence-transformers
+torch==2.6.0 # load the CUDA version if using GPU
+torchvision
+transformers
+tqdm
+
+
+
+
+
+ 

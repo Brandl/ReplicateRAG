@@ -43,10 +43,6 @@ class RAGModelManager:
         
         print("Loading RAG model components...")
         
-        # # trying new version as suggested on hugging face how to use it to load model directly
-        # self.tokenizer = AutoTokenizer.from_pretrained("facebook/rag-token-nq")
-        # self.model = RagTokenForGeneration.from_pretrained("facebook/rag-token-nq")
-        
         self.tokenizer = RagTokenizer.from_pretrained("facebook/rag-token-nq")
         self.retriever = RagRetriever.from_pretrained(
             "facebook/rag-token-nq", # default: nq embeddings, split psgs-w100,
@@ -262,7 +258,7 @@ def test_first_batch(dataloader, model, tokenizer, device, output_path):
     ids, questions, _ = next(iter(dataloader))
 
     # Generate predictions
-    predictions = generate_answer(questions, device, model, tokenizer)
+    predictions = model.generate_answer(questions, device, model, tokenizer)
 
     # Fallback to --NOT FOUND--\n
     for id_, q, pred in zip(ids, questions, predictions):

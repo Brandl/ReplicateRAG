@@ -4,7 +4,6 @@ from tqdm import tqdm
 import pandas as pd
 import time
 
-from datasets import load_from_disk
 from datasets import Dataset as hfDataset
 from transformers import DPRContextEncoder, DPRContextEncoderTokenizer
 from transformers import RagTokenizer, RagRetriever, RagTokenForGeneration
@@ -21,7 +20,7 @@ class LocalDprRetrieverDataset:
                  retriever_ds: hfDataset = None):
         self.purpose = purpose  # Change to "sample" for the sample dataset, change to "full" for the full dataset
         self.dataset_name = dataset_name
-        self.dpr_data_dir = Path("retrieverdata/wiki_dpr_download/downloads/data/wikipedia_split/psgs_w100.tsv")
+        self.dpr_data_dir = Path("retrieverdata/wiki_dpr/psgs_w100.tsv")
         self.retriever_ds = retriever_ds
     
     def prepare_and_store_retriever_dataset(self):
@@ -332,7 +331,7 @@ def test_first_batch(dataloader, model, tokenizer, device, output_path):
     ids, questions, _ = next(iter(dataloader))
 
     # Generate predictions
-    predictions = generate_answer(questions, device, model, tokenizer)
+    predictions = model.generate_answer(questions, device, model, tokenizer)
 
     # Fallback to --NOT FOUND--\n
     for id_, q, pred in zip(ids, questions, predictions):

@@ -6,14 +6,72 @@ Code for a university group project.
 
 ### Group
 
-Juergen Brandl 
-Alenka Triplat 
-Jihye Kang 
+- Juergen Brandl 
+- Jihye Kang 
+- Alenka Triplat 
+
+## I. Replicate
+
+Install the requirements first
+
+    pip install -U transformers datasets faiss-cpu huggingface_hub fsspec
+    pip install -U torch torchvision
+
+We used the model to run answering of questions on 6 different dataset. For convience this repo comes with `qa_dataset_all_slices.tar.gz` which includes wikipedia articles from NaturalQA and TriviaQA dataset for you to load. Unpack all datasets first:
+
+    tar -zxvf psgs_w100.tsv.gz
+
+In replication, each approach will run prediction of Answers for the following configuration: "dataset_name", "size", "use dummy". If use_dummy set to `True` it loads only 10.000 retrieval docs for Retriever:
+- "nq", "350", False
+- "triviaqa", "1k", False
+- "nq", "3600", False
+- "nq", "11000", False
+- "triviaqa", "10k", False
+- "triviaqa", "30k", False
+
+There are 5 different implementations for RAG Retriever. Each one will generate answers into folder `/replicate_answers`
+
+### 1. Full Retriever
+This loads the pre-trained RAG Retriever from [HuggingFace RAG](https://github.com/huggingface/transformers/blob/main/src/transformers/models/rag/retrieval_rag.py): "facebook/rag-token-nq", with "compressed" index. The complete retriever index requires over 76GB of RAM. To load the file, you should use at PyTorch version 2.6 or higher.
+In detail for `psgs_w100.nq.compressed` dataset which is use:
+
+    Size of downloaded dataset files: 85.23 GB
+    Size of the generated dataset: 78.42 GB
+    Total amount of disk used: 163.71 GB
+
+You might have to install git LFS when loading large files
+
+    git LFS (sudo apt-get install -y git-lfs)
+
+To replicate the RAG approach by loading entire retriever run:
+
+    python replicate_answers_Full_Retriever.py
+
+### 2. Dummy Retriever
+
+To replicate the RAG approach by using only dummy size dataset for Retriever (proof of concept), run: 
+
+    python replicate_answers_Dummy_Retriever.py
+
+### 3. Load Wikipedia DPR dataset and load Retriever locally
+
+Since Full retriever may get "stuck" loading the data due to RAM and local Disk size problems, we developed an approach to load the entire Wikipedia DPR dataset locally and then load the retriever using the locally available data.
+
+You will need to first load the dataset from Wiki DPR available at [HuggingFace Wiki DPR](https://huggingface.co/datasets/facebook/wiki_dpr) into folder: `retrieverdata/wiki_dpr` The easiest is to use wget to get the respective data and index file. We used this file for data `psgs_w100.tsv`and this one for index `psgs_w100.nq.IVF4096_HNSW128_PQ128-IP-train.faiss`
+
+The approach requires to embed the retrieved passages from data file (limited at max length of 512) and add faiss index again before loading dataset. We use the a pretrained DPR Context Encoder and Tokenizer for that. The code is optimized to use GPU and max RAM of JupyterLab engine (e.g. using batch size of 512 for embedding, reduce if you don't have sufficient RAM and GPU available).
+
+    python replicate_answers_local_dpr.py
+
+### 4. Load smaller Wikipedia doc dataset and load Retriever locally
+
+Essentially same approach as for 3. but with smaller Wikipedia dataset. You will need to first load the dataset from Wiki Snippets available at [HuggingFace Wiki Snippets](https://huggingface.co/datasets/community-datasets/wiki_snippets) into folder: `retrieverdata/rtr_wiki_small` The easiest is to use wget to get the respective data and index file.
+
+    python replicate_answers_wiki_small.py
 
 
-## Replicate
 
-## Modern RAG
+## II. Modern RAG
 
 Install the requirements first
 
@@ -54,7 +112,12 @@ To prepare answer files for eval the command is as follows:
 
 This will read in questions and write the answers down in the specified file.
 
-## Eval
+## III. Eval
+
+You can evaluate the generated answer with "golden" true answers by running the following script or equivalent files: first argument is for file which stores prediction, second one for gold answers as downloaded in earlier steps. Both files should be .json format following this structure:  `{int(d["id"]): (d["question"], d["answer"])}`
+
+    python eval_rag_.py --preds_ref answers/nq_350_answers_jn.json qa_datasets_all_slices/naturalqa_slice_350_qa.json
+
 
 ## Sources
 Original Paper:
@@ -85,9 +148,13 @@ Original Paper:
     }
 
 Datasets:
+
 https://dl.fbaipublicfiles.com/dpr/wikipedia_split/psgs_w100.tsv.gz
+https://huggingface.co/datasets/community-datasets/wiki_snippets/tree/main/wiki40b_en_100_0
 https://huggingface.co/datasets/google-research-datasets/natural_questions
 https://nlp.cs.washington.edu/triviaqa/
+
 Code Samples & Image Credit
+
 https://github.com/langchain-ai/rag-from-scratch
 
